@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
@@ -87,6 +88,7 @@ function Register(props) {
     draggable: true,
     theme: "dark",
   };
+  const navigate = useNavigate();
   const handleValidation = () => {
     const { password, username, email, confirmPassword } = values;
     if (password !== confirmPassword) {
@@ -115,6 +117,13 @@ function Register(props) {
         email,
         confirmPassword,
       });
+      if (data.status === false) {
+        toast.error(data.msg, toastOptions);
+      }
+      if (data.status === true) {
+        localStorage.setItem("chat-app-user", JSON.stringify(data.user));
+        navigate("/");
+      }
     }
   };
   const handleChange = (event) => {
