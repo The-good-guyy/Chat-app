@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { registerRoutes } from "../utils/APIRoutes";
 const FormContainer = styled.div`
   height: 100vh;
   width: 100vw;
@@ -19,16 +23,102 @@ const FormContainer = styled.div`
     img {
       height: 5rem;
     }
+    h1 {
+      color: white;
+      text-transform: uppercase;
+    }
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: #00000076;
+    border-radius: 2rem;
+    padding: 3rem 5rem;
+    input {
+      background-color: transparent;
+      padding: 1rem;
+      border: 0.1rem solid #4e0eff;
+      border-radius: 0.4rem;
+      color: white;
+      width: 100%;
+      font-size: 1rem;
+      &:focus {
+        border: solid 0.1rem #997af0;
+        outline: none;
+      }
+    }
+  }
+  button {
+    background-color: #997af0;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0.4rem;
+    font-szie: 1rem;
+    text-transform: uppercase;
+    &:hover {
+      background-color: #4e0eff;
+    }
+  }
+  span {
+    text-transform: uppercase;
+    color: white;
+    a {
+      color: #4e0eff;
+      font-weight: bold;
+      text-decoration: none;
+    }
   }
 `;
 function Register(props) {
-  const handleSubmit = (event) => {
+  const [values, setValues] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+  const handleValidation = () => {
+    const { password, username, email, confirmPassword } = values;
+    if (password !== confirmPassword) {
+      toast.error("password and confirm password should be same", toastOptions);
+      return false;
+    } else if (username.length < 3) {
+      toast.error("Username must be greater than 3 characters", toastOptions);
+      return false;
+    } else if (password.length < 8) {
+      toast.error("Password must be greater than 8 characters", toastOptions);
+      return false;
+    } else if (email === "") {
+      toast.error("Email is required", toastOptions);
+      return false;
+    }
+    return true;
+  };
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert("form");
+    if (handleValidation()) {
+      console.log("in Validation", registerRoutes);
+      const { password, username, email, confirmPassword } = values;
+      const { data } = await axios.post(registerRoutes, {
+        password,
+        username,
+        email,
+        confirmPassword,
+      });
+    }
   };
   const handleChange = (event) => {
-    event.preventDefault();
-    alert("change");
+    setValues({ ...values, [event.target.name]: event.target.value });
   };
   return (
     <>
@@ -72,6 +162,7 @@ function Register(props) {
           </span>
         </form>
       </FormContainer>
+      <ToastContainer />
     </>
   );
 }
