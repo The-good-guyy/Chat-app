@@ -1,5 +1,6 @@
 const User = require("../model/userModel");
 const bcrypt = require("bcrypt");
+const { ObjectId } = require("mongodb");
 module.exports.register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -36,6 +37,28 @@ module.exports.login = async (req, res, next) => {
     }
     delete user.password;
     return res.json({ status: true, user });
+  } catch (ex) {
+    next(ex);
+  }
+};
+module.exports.setAvatar = async (req, res, next) => {
+  try {
+    // const userId = req.params.id;
+    const userId = "65dda99730c01bf36aa47558";
+    const avatarImage = req.body.image;
+    const userData = await User.findByIdAndUpdate(
+      userId,
+      {
+        isAvatarImageSet: true,
+        avatarImage,
+      },
+      { new: true }
+    );
+    console.log(userData.isAvatarImageSet);
+    return res.json({
+      isSet: userData.isAvatarImageSet,
+      image: userData.avatarImage,
+    });
   } catch (ex) {
     next(ex);
   }

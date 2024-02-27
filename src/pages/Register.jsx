@@ -122,7 +122,7 @@ function Register(props) {
       }
       if (data.status === true) {
         localStorage.setItem("chat-app-user", JSON.stringify(data.user));
-        navigate("/");
+        navigate("/login");
       }
     }
   };
