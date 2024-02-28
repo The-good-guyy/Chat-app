@@ -54,7 +54,7 @@ function Chat(props) {
   return (
     <Container>
       <div className="container">
-        <Contact contacts={contacts}></Contact>
+        <Contact contacts={contacts} currentUser={currentUser}></Contact>
       </div>
     </Container>
   );
