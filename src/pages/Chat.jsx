@@ -4,6 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { allUserRoutes } from "../utils/APIRoutes";
 import Contact from "../components/Contract";
+import Welcome from "../components/Welcome";
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
@@ -62,6 +63,7 @@ function Chat(props) {
     <Container>
       <div className="container">
         <Contact contacts={contacts} changeChat={handleChatChange}></Contact>
+        {currentUser && <Welcome currentUser={currentUser}></Welcome>}
       </div>
     </Container>
   );
