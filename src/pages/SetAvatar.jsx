@@ -27,11 +27,10 @@ function SetAvatar(props) {
       toast.error("Please select an avatar", toastOptions);
     } else {
       const user = await JSON.parse(localStorage.getItem("chat-app-user"));
-      console.log(user._id);
       const data = await axios.post(`${setAvatarRoutes}/${user._id}`, {
         image: avatars[selectedAvatar],
       });
-      console.log(data.data.isSet);
+      // console.log(data.data.isSet);
       if (data.data.isSet) {
         user.isAvatarImageSet = true;
         user.avatarImage = data.image;

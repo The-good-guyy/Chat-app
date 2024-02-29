@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
@@ -27,8 +27,15 @@ const Container = styled.div`
 function Chat(props) {
   const [contacts, setContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentChat, setCurrentChat] = useState(undefined);
   const navigate = useNavigate();
+  const dataFetch = useRef(false);
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  };
   useEffect(() => {
+    if (dataFetch.current) return;
+    dataFetch.current = true;
     async function setUser() {
       if (!localStorage.getItem("chat-app-user")) {
         navigate("/login");
@@ -45,7 +52,7 @@ function Chat(props) {
           const data = await axios.get(`${allUserRoutes}/${currentUser._id}`);
           setContacts(data.data);
         } else {
-          navigate("/setAvatar");
+          navigate("/avatar");
         }
       }
     }
@@ -54,7 +61,7 @@ function Chat(props) {
   return (
     <Container>
       <div className="container">
-        <Contact contacts={contacts} currentUser={currentUser}></Contact>
+        <Contact contacts={contacts} changeChat={handleChatChange}></Contact>
       </div>
     </Container>
   );

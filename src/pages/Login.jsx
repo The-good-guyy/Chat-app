@@ -20,7 +20,6 @@ export default function Login() {
   useEffect(() => {
     if (localStorage.getItem("chat-app-user")) {
       // navigate("/");
-      console.log("Aleardy log in");
     }
   }, []);
 
@@ -56,7 +55,6 @@ export default function Login() {
         // //   process.env.REACT_APP_LOCALHOST_KEY,
         // //   JSON.stringify(data.user)
         // );
-        console.log("Success login");
         localStorage.setItem("chat-app-user", JSON.stringify(data.user));
         navigate("/");
       }

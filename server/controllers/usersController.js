@@ -42,8 +42,8 @@ module.exports.login = async (req, res, next) => {
 };
 module.exports.setAvatar = async (req, res, next) => {
   try {
-    // const userId = req.params.id;
-    const userId = "65dda99730c01bf36aa47558";
+    const userId = req.params.id;
+    // const userId = "65dda99730c01bf36aa47558";
     const avatarImage = req.body.image;
     const userData = await User.findByIdAndUpdate(
       userId,
@@ -62,7 +62,7 @@ module.exports.setAvatar = async (req, res, next) => {
     next(ex);
   }
 };
-module.allUserRoutes = async (req, res, next) => {
+module.exports.allUserRoutes = async (req, res, next) => {
   try {
     const users = await User.find({ _id: { $ne: req.params.id } }).select([
       "email",
