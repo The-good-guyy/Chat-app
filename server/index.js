@@ -4,11 +4,13 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const app = express();
+const messageRoutes = require("./routes/messageRoutes");
 require("dotenv").config();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use("/api/auth", userRoutes);
+app.use("/api/messages", messageRoutes);
 mongoose
   .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,

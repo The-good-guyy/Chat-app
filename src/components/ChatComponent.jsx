@@ -3,8 +3,16 @@ import styled from "styled-components";
 import LogOut from "./LogOut";
 import ChatInput from "./ChatInput";
 import Message from "./Message";
-function ChatComponent({ currentChat }) {
-  const handleSendMsg = async (msg) => {};
+import { addMessageRoutes } from "../utils/APIRoutes";
+import axios from "axios";
+function ChatComponent({ currentChat, currentUser }) {
+  const handleSendMsg = async (msg) => {
+    const data = await axios.post(addMessageRoutes, {
+      from: currentUser._id,
+      to: currentChat._id,
+      message: msg,
+    });
+  };
   return (
     <Container>
       <div className="chat-header">
