@@ -5,6 +5,7 @@ import axios from "axios";
 import { allUserRoutes } from "../utils/APIRoutes";
 import Contact from "../components/Contract";
 import Welcome from "../components/Welcome";
+import ChatComponent from "../components/ChatComponent";
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
@@ -25,10 +26,11 @@ const Container = styled.div`
     }
   }
 `;
-function Chat(props) {
+function Chat() {
   const [contacts, setContacts] = useState([]);
   const [currentUser, setCurrentUser] = useState(undefined);
   const [currentChat, setCurrentChat] = useState(undefined);
+  const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
   const dataFetch = useRef(false);
   const handleChatChange = (chat) => {
@@ -42,6 +44,7 @@ function Chat(props) {
         navigate("/login");
       } else {
         setCurrentUser(await JSON.parse(localStorage.getItem("chat-app-user")));
+        setIsLoaded(true);
       }
     }
     setUser();
@@ -63,7 +66,12 @@ function Chat(props) {
     <Container>
       <div className="container">
         <Contact contacts={contacts} changeChat={handleChatChange}></Contact>
-        {currentUser && <Welcome currentUser={currentUser}></Welcome>}
+        {currentUser &&
+          (isLoaded && currentChat === undefined ? (
+            <Welcome currentUser={currentUser}></Welcome>
+          ) : (
+            <ChatComponent currentChat={currentChat} />
+          ))}
       </div>
     </Container>
   );
