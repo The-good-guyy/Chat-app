@@ -53,7 +53,7 @@ module.exports.setAvatar = async (req, res, next) => {
       },
       { new: true }
     );
-    console.log(userData.isAvatarImageSet);
+    delete userData.password;
     return res.json({
       isSet: userData.isAvatarImageSet,
       image: userData.avatarImage,
