@@ -2,10 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
-import { allUserRoutes } from "../utils/APIRoutes";
+import { allUserRoutes, host } from "../utils/APIRoutes";
 import Contact from "../components/Contract";
 import Welcome from "../components/Welcome";
 import ChatComponent from "../components/ChatComponent";
+import { io } from "socket.io-client";
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
@@ -33,9 +34,11 @@ function Chat() {
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
   const dataFetch = useRef(false);
+  const socket = useRef();
   const handleChatChange = (chat) => {
     setCurrentChat(chat);
   };
+
   useEffect(() => {
     if (dataFetch.current) return;
     dataFetch.current = true;
@@ -49,6 +52,12 @@ function Chat() {
     }
     setUser();
   }, []);
+  useEffect(() => {
+    if (currentUser) {
+      socket.current = io(host);
+      socket.current.emit("add-user", currentUser._id);
+    }
+  }, [currentUser]);
   useEffect(() => {
     async function setAvatar() {
       if (currentUser) {
@@ -73,6 +82,7 @@ function Chat() {
             <ChatComponent
               currentChat={currentChat}
               currentUser={currentUser}
+              socket={socket}
             />
           ))}
       </div>
